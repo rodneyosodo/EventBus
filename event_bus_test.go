@@ -173,7 +173,7 @@ func TestSubscribeAsync(t *testing.T) {
 	numResults := 0
 
 	go func() {
-		for _ = range results {
+		for range results {
 			numResults++
 		}
 	}()
@@ -183,7 +183,7 @@ func TestSubscribeAsync(t *testing.T) {
 
 	time.Sleep(10 * time.Millisecond)
 
-	// todo race detected during execution of test
+	// latertodo race detected during execution of test
 	//if numResults != 2 {
 	//	t.Fail()
 	//}
