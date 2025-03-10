@@ -1,3 +1,3 @@
 module github.com/rodneyosodo/EventBus
 
-go 1.24.1
+go 1.16
