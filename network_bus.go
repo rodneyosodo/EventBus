@@ -10,7 +10,7 @@ import (
 )
 
 // NetworkBus - object capable of subscribing to remote event buses in addition
-// to remote event busses subscribing to it's local event bus. Compoed of a server and client.
+// to remote event buses subscribing to its local event bus. Composed of a server and client.
 type NetworkBus struct {
 	*Client
 	*Server
