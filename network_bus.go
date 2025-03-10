@@ -9,8 +9,8 @@ import (
 	"sync"
 )
 
-// NetworkBus - object capable of subscribing to remote event buses in addition to remote event
-// busses subscribing to it's local event bus. Compoed of a server and client
+// NetworkBus - object capable of subscribing to remote event buses in addition
+// to remote event busses subscribing to it's local event bus. Compoed of a server and client.
 type NetworkBus struct {
 	*Client
 	*Server
@@ -20,7 +20,7 @@ type NetworkBus struct {
 	path      string
 }
 
-// NewNetworkBus - returns a new network bus object at the server address and path
+// NewNetworkBus - returns a new network bus object at the server address and path.
 func NewNetworkBus(address, path string) *NetworkBus {
 	bus := new(NetworkBus)
 	bus.sharedBus = New()
@@ -29,21 +29,22 @@ func NewNetworkBus(address, path string) *NetworkBus {
 	bus.service = &NetworkBusService{&sync.WaitGroup{}, false}
 	bus.address = address
 	bus.path = path
+
 	return bus
 }
 
-// EventBus - returns wrapped event bus
+// EventBus - returns wrapped event bus.
 func (networkBus *NetworkBus) EventBus() Bus {
 	return networkBus.sharedBus
 }
 
-// NetworkBusService - object capable of serving the network bus
+// NetworkBusService - object capable of serving the network bus.
 type NetworkBusService struct {
 	wg      *sync.WaitGroup
 	started bool
 }
 
-// Start - helper method to serve a network bus service
+// Start - helper method to serve a network bus service.
 func (networkBus *NetworkBus) Start() error {
 	var err error
 	service := networkBus.service
@@ -63,10 +64,11 @@ func (networkBus *NetworkBus) Start() error {
 	} else {
 		err = errors.New("Server bus already started")
 	}
+
 	return err
 }
 
-// Stop - signal for the service to stop serving
+// Stop - signal for the service to stop serving.
 func (networkBus *NetworkBus) Stop() {
 	service := networkBus.service
 	if service.started {

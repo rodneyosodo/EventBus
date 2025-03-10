@@ -9,22 +9,22 @@ import (
 	"sync"
 )
 
-// SubscribeType - how the client intends to subscribe
+// SubscribeType - how the client intends to subscribe.
 type SubscribeType int
 
 const (
-	// Subscribe - subscribe to all events
+	// Subscribe - subscribe to all events.
 	Subscribe SubscribeType = iota
-	// SubscribeOnce - subscribe to only one event
+	// SubscribeOnce - subscribe to only one event.
 	SubscribeOnce
 )
 
 const (
-	// RegisterService - Server subscribe service method
+	// RegisterService - Server subscribe service method.
 	RegisterService = "ServerService.Register"
 )
 
-// SubscribeArg - object to hold subscribe arguments from remote event handlers
+// SubscribeArg - object to hold subscribe arguments from remote event handlers.
 type SubscribeArg struct {
 	ClientAddr    string
 	ClientPath    string
@@ -33,7 +33,7 @@ type SubscribeArg struct {
 	Topic         string
 }
 
-// Server - object capable of being subscribed to by remote handlers
+// Server - object capable of being subscribed to by remote handlers.
 type Server struct {
 	eventBus    Bus
 	address     string
@@ -42,7 +42,7 @@ type Server struct {
 	service     *ServerService
 }
 
-// NewServer - create a new Server at the address and path
+// NewServer - create a new Server at the address and path.
 func NewServer(address, path string, eventBus Bus) *Server {
 	server := new(Server)
 	server.eventBus = eventBus
@@ -50,10 +50,11 @@ func NewServer(address, path string, eventBus Bus) *Server {
 	server.path = path
 	server.subscribers = make(map[string][]*SubscribeArg)
 	server.service = &ServerService{server, &sync.WaitGroup{}, false}
+
 	return server
 }
 
-// EventBus - returns wrapped event bus
+// EventBus - returns wrapped event bus.
 func (server *Server) EventBus() Bus {
 	return server.eventBus
 }
@@ -76,7 +77,7 @@ func (server *Server) rpcCallback(subscribeArg *SubscribeArg) func(args ...inter
 	}
 }
 
-// HasClientSubscribed - True if a client subscribed to this server with the same topic
+// HasClientSubscribed - True if a client subscribed to this server with the same topic.
 func (server *Server) HasClientSubscribed(arg *SubscribeArg) bool {
 	if topicSubscribers, ok := server.subscribers[arg.Topic]; ok {
 		for _, topicSubscriber := range topicSubscribers {
@@ -85,10 +86,11 @@ func (server *Server) HasClientSubscribed(arg *SubscribeArg) bool {
 			}
 		}
 	}
+
 	return false
 }
 
-// Start - starts a service for remote clients to subscribe to events
+// Start - starts a service for remote clients to subscribe to events.
 func (server *Server) Start() error {
 	var err error
 	service := server.service
@@ -107,10 +109,11 @@ func (server *Server) Start() error {
 	} else {
 		err = errors.New("Server bus already started")
 	}
+
 	return err
 }
 
-// Stop - signal for the service to stop serving
+// Stop - signal for the service to stop serving.
 func (server *Server) Stop() {
 	service := server.service
 	if service.started {
@@ -119,16 +122,16 @@ func (server *Server) Stop() {
 	}
 }
 
-// ServerService - service object to listen to remote subscriptions
+// ServerService - service object to listen to remote subscriptions.
 type ServerService struct {
 	server  *Server
 	wg      *sync.WaitGroup
 	started bool
 }
 
-// Register - Registers a remote handler to this event bus
-// for a remote subscribe - a given client address only needs to subscribe once
-// event will be republished in local event bus
+// Register - Registers a remote handler to this event bus for a
+// remote subscribe - a given client address only needs to subscribe once event
+// will be republished in local event bus.
 func (service *ServerService) Register(arg *SubscribeArg, success *bool) error {
 	subscribers := service.server.subscribers
 	if !service.server.HasClientSubscribed(arg) {
@@ -149,5 +152,6 @@ func (service *ServerService) Register(arg *SubscribeArg, success *bool) error {
 		subscribers[arg.Topic] = topicSubscribers
 	}
 	*success = true
+
 	return nil
 }
