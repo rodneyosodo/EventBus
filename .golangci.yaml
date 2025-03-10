@@ -1,0 +1,16 @@
+linters:
+  enable-all: true
+  fast: true
+  disable:
+    - lll
+    - wsl
+    - depguard
+    - gochecknoinits
+    - testpackage
+
+linters-settings:
+  funlen:
+    lines: -1
+    statements: -1
+  gocritic:
+    enable-all: true
